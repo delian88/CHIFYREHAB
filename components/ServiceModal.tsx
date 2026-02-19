@@ -3,6 +3,7 @@ import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, CheckCircle2 } from 'lucide-react';
 import ShiningText from './ShiningText';
+import SafeImage from './SafeImage';
 
 interface ServiceModalProps {
   isOpen: boolean;
@@ -43,7 +44,7 @@ const ServiceModal: React.FC<ServiceModalProps> = ({ isOpen, onClose, service })
 
             <div className="grid lg:grid-cols-2">
               <div className="h-64 lg:h-auto overflow-hidden">
-                <img src={service.img} alt={service.title} className="w-full h-full object-cover" />
+                <SafeImage src={service.img} alt={service.title} className="w-full h-full" />
               </div>
               <div className="p-8 lg:p-16">
                 <ShiningText as="h2" text={service.title} className="text-4xl mb-6" />

@@ -6,6 +6,7 @@ import ShiningText from './components/ShiningText';
 import ChatBot from './components/ChatBot';
 import Counter from './components/Counter';
 import ServiceModal from './components/ServiceModal';
+import SafeImage, { LOGO_URL } from './components/SafeImage';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Stethoscope, 
@@ -35,21 +36,6 @@ import {
   BrainCircuit,
   Baby
 } from 'lucide-react';
-
-const LOGO_URL = "https://img.js.design/assets/static/f5e386457007e1554625b1854497e246.png";
-
-// Reusable Image component with Brand Logo fallback for broken images
-const SafeImage: React.FC<{ src: string; alt: string; className?: string }> = ({ src, alt, className }) => {
-  const [error, setError] = useState(false);
-  return (
-    <img 
-      src={error ? LOGO_URL : src} 
-      alt={alt} 
-      className={`${className} ${error ? 'object-contain p-8 bg-gray-50' : 'object-cover'}`}
-      onError={() => setError(true)}
-    />
-  );
-};
 
 const SERVICES_DATA = [
   { 
@@ -144,7 +130,7 @@ const App: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-white selection:bg-pink-100 selection:text-pink-600">
       <Navbar currentView={currentView} onNavigate={setCurrentView} />
       
       {/* Notifications */}
@@ -162,7 +148,7 @@ const App: React.FC = () => {
                 <Bell size={24} />
               </div>
               <div className="flex-1">
-                <p className="font-black text-gray-900 text-xs uppercase tracking-wider mb-1">Clinic Alert</p>
+                <p className="font-black text-gray-900 text-xs uppercase tracking-wider mb-1">System Update</p>
                 <p className="text-gray-600 font-medium leading-relaxed">{toast.message}</p>
               </div>
               <motion.div 
@@ -182,7 +168,7 @@ const App: React.FC = () => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: 0.4 }}
+          transition={{ duration: 0.5 }}
         >
           {renderView()}
         </motion.div>
@@ -208,10 +194,10 @@ const HomeLandingView: React.FC<{ onNavigate: (v: ViewState) => void, openServic
     <section className="py-24 bg-white">
       <div className="max-w-7xl mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-12 text-center">
         {[
-          { label: 'Patient Victories', value: 15000, suffix: '+', icon: <div className="w-16 h-16 mx-auto mb-4 rounded-full overflow-hidden shadow-2xl shadow-pink-500/30 transform hover:scale-110 transition-transform logo-glow border-4 border-pink-50 bg-white"><img src={LOGO_URL} className="w-full h-full object-cover" alt="Clinic Brand" /></div> },
-          { label: 'Specialists', value: 120, suffix: '+', icon: <Users className="text-blue-500 mx-auto mb-4" size={32} /> },
-          { label: 'Facilities', value: 45, suffix: '', icon: <Globe className="text-pink-500 mx-auto mb-4" size={32} /> },
-          { label: 'Years Leading', value: 25, suffix: '', icon: <Trophy className="text-blue-500 mx-auto mb-4" size={32} /> },
+          { label: 'Successful Outcomes', value: 15000, suffix: '+', icon: <div className="w-20 h-20 mx-auto mb-6 rounded-full overflow-hidden shadow-2xl border-4 border-white transform hover:scale-110 transition-transform"><img src={LOGO_URL} className="w-full h-full object-cover" alt="Chify Seal" /></div> },
+          { label: 'Leading Specialists', value: 120, suffix: '+', icon: <Users className="text-blue-500 mx-auto mb-6" size={40} /> },
+          { label: 'National Centers', value: 45, suffix: '', icon: <Globe className="text-pink-500 mx-auto mb-6" size={40} /> },
+          { label: 'Excellence Awards', value: 25, suffix: '', icon: <Trophy className="text-blue-500 mx-auto mb-6" size={40} /> },
         ].map((stat, i) => (
           <motion.div 
             key={i}
@@ -222,10 +208,10 @@ const HomeLandingView: React.FC<{ onNavigate: (v: ViewState) => void, openServic
             className="group"
           >
             {stat.icon}
-            <div className="text-5xl font-black text-gray-900 mb-2">
+            <div className="text-6xl font-black text-gray-900 mb-2">
               <Counter target={stat.value} suffix={stat.suffix} />
             </div>
-            <div className="text-gray-400 font-bold uppercase tracking-widest text-[10px]">{stat.label}</div>
+            <div className="text-gray-400 font-bold uppercase tracking-widest text-xs">{stat.label}</div>
           </motion.div>
         ))}
       </div>
@@ -233,22 +219,37 @@ const HomeLandingView: React.FC<{ onNavigate: (v: ViewState) => void, openServic
 
     <section className="py-32 bg-gray-50 overflow-hidden relative">
       <div className="max-w-7xl mx-auto px-6 grid lg:grid-cols-2 gap-24 items-center">
-        <motion.div initial={{ opacity: 0, x: -30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }}>
-          <h4 className="text-blue-600 font-black uppercase tracking-widest text-sm mb-4">The Chify Promise</h4>
-          <ShiningText as="h2" text="Redefining the Standards of Recovery" className="text-4xl md:text-6xl mb-8 leading-tight" />
+        <motion.div initial={{ opacity: 0, x: -50 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }}>
+          <h4 className="text-blue-600 font-black uppercase tracking-widest text-sm mb-4">The Chify Advantage</h4>
+          <ShiningText as="h2" text="Pioneering Human Potential Recovery" className="text-5xl md:text-7xl mb-8 leading-tight" />
           <p className="text-gray-600 text-xl mb-10 leading-relaxed font-light">
-            We merge clinical precision with deep human empathy. Our facilities in Abuja and beyond are equipped with the latest diagnostic AI to ensure your roadmap to health is as unique as you are.
+            Founded in Abuja, Chify Rehabilitation is West Africa's beacon for neurological and physical excellence. We don't just treat symptoms; we engineer pathways back to the life you love.
           </p>
           <div className="flex flex-col sm:flex-row gap-6">
-            <button onClick={() => onNavigate('about')} className="bg-blue-600 text-white px-10 py-5 rounded-full font-bold flex items-center justify-center gap-3 hover:bg-blue-700 transition-all shadow-xl shadow-blue-600/20">
-              Our Clinical Vision <ChevronRight size={20} />
+            <button onClick={() => onNavigate('contact')} className="bg-blue-600 text-white px-12 py-5 rounded-full font-black text-lg hover:bg-blue-700 transition-all shadow-xl shadow-blue-600/30 btn-shimmer">
+              Book a Consultation
+            </button>
+            <button onClick={() => onNavigate('expertise')} className="border-2 border-pink-500 text-pink-500 px-12 py-5 rounded-full font-black text-lg hover:bg-pink-50 transition-all">
+              Our Research Labs
             </button>
           </div>
         </motion.div>
         
         <div className="relative">
           <div className="absolute -top-12 -left-12 w-64 h-64 bg-pink-100 rounded-full blur-3xl opacity-50" />
-          <SafeImage src="https://images.unsplash.com/photo-1576091160550-2173dba999ef?auto=format&fit=crop&w=1000&q=80" className="rounded-[4rem] shadow-2xl relative z-10 border-[12px] border-white" alt="Chify Facility" />
+          <div className="absolute -bottom-12 -right-12 w-64 h-64 bg-blue-100 rounded-full blur-3xl opacity-50" />
+          <SafeImage src="https://images.unsplash.com/photo-1576091160550-2173dba999ef?auto=format&fit=crop&w=1000&q=80" className="rounded-[4rem] shadow-[0_50px_100px_-20px_rgba(0,0,0,0.2)] relative z-10 border-[16px] border-white" alt="Chify Clinical Care" />
+          <div className="absolute -bottom-6 -left-6 bg-white p-8 rounded-3xl shadow-2xl z-20 border border-gray-100">
+             <div className="flex items-center gap-3 mb-2">
+                <Star fill="#f59e0b" stroke="none" size={16} />
+                <Star fill="#f59e0b" stroke="none" size={16} />
+                <Star fill="#f59e0b" stroke="none" size={16} />
+                <Star fill="#f59e0b" stroke="none" size={16} />
+                <Star fill="#f59e0b" stroke="none" size={16} />
+             </div>
+             <p className="font-black text-gray-900">Top-Tier Clinic</p>
+             <p className="text-xs text-gray-400 uppercase tracking-widest font-bold">Abuja Medical Board</p>
+          </div>
         </div>
       </div>
     </section>
@@ -256,24 +257,24 @@ const HomeLandingView: React.FC<{ onNavigate: (v: ViewState) => void, openServic
     <section className="py-32 bg-white">
       <div className="max-w-7xl mx-auto px-6">
         <div className="text-center max-w-3xl mx-auto mb-20">
-          <h4 className="text-pink-500 font-black uppercase tracking-widest text-sm mb-4">Our Expertise</h4>
-          <ShiningText as="h2" text="Specialized Clinical Departments" className="text-4xl md:text-5xl" />
+          <h4 className="text-pink-500 font-black uppercase tracking-widest text-sm mb-4">Core Competencies</h4>
+          <ShiningText as="h2" text="Specialized Clinical Pathways" className="text-4xl md:text-5xl" />
         </div>
         <div className="grid md:grid-cols-3 gap-10">
           {SERVICES_DATA.slice(0, 3).map((service, i) => (
             <motion.div 
               key={i} 
-              whileHover={{ y: -10 }}
+              whileHover={{ y: -15, scale: 1.02 }}
               onClick={() => openService(service)} 
-              className="group cursor-pointer bg-white p-12 rounded-[3rem] shadow-xl border border-gray-100 hover:border-blue-200 transition-all"
+              className="group cursor-pointer bg-white p-12 rounded-[3.5rem] shadow-[0_30px_60px_-15px_rgba(0,0,0,0.05)] border border-gray-100 hover:border-pink-200 transition-all duration-500"
             >
-              <div className="w-16 h-16 bg-blue-50 rounded-2xl flex items-center justify-center mb-10 group-hover:bg-blue-600 group-hover:text-white transition-all">
+              <div className="w-16 h-16 bg-blue-50 rounded-2xl flex items-center justify-center mb-10 group-hover:bg-blue-600 group-hover:text-white transition-all duration-500">
                 {React.cloneElement(service.icon as React.ReactElement, { size: 32 })}
               </div>
-              <h3 className="text-2xl font-black mb-4">{service.title}</h3>
-              <p className="text-gray-500 mb-8 leading-relaxed">{service.desc}</p>
-              <div className="text-blue-600 font-black flex items-center gap-2">
-                Learn More <ChevronRight size={18} />
+              <h3 className="text-2xl font-black mb-4 group-hover:text-pink-600 transition-colors">{service.title}</h3>
+              <p className="text-gray-500 mb-8 leading-relaxed font-light">{service.desc}</p>
+              <div className="text-blue-600 font-black flex items-center gap-2 group-hover:translate-x-2 transition-transform">
+                Clinical Details <ChevronRight size={18} />
               </div>
             </motion.div>
           ))}
@@ -282,20 +283,24 @@ const HomeLandingView: React.FC<{ onNavigate: (v: ViewState) => void, openServic
     </section>
 
     <section className="py-32 bg-gray-900 text-white relative overflow-hidden">
-      <div className="absolute top-0 right-0 p-20 opacity-5">
-        <img src={LOGO_URL} className="w-[400px] grayscale" alt="Faded Logo" />
+      <div className="absolute top-0 right-0 p-20 opacity-5 pointer-events-none">
+        <img src={LOGO_URL} className="w-[500px] grayscale" alt="Faded Brand Identity" />
       </div>
-      <div className="max-w-4xl mx-auto px-6 relative z-10">
-        <div className="text-center mb-20">
-          <h4 className="text-blue-400 font-black uppercase tracking-widest text-sm mb-4">Patient FAQ</h4>
-          <h2 className="text-4xl md:text-5xl font-black mb-6">Expert Answers</h2>
-        </div>
-        <div className="space-y-6">
+      <div className="max-w-4xl mx-auto px-6 relative z-10 text-center">
+        <h4 className="text-blue-400 font-black uppercase tracking-widest text-sm mb-6">Patient Advocacy</h4>
+        <h2 className="text-5xl md:text-7xl font-black mb-12">Healing is a Journey. <br/><span className="text-pink-500">We Walk it With You.</span></h2>
+        <p className="text-gray-400 text-xl mb-20 leading-relaxed font-light">
+          Recovery isn't just about physical therapy; it's about emotional support and technical precision. At Chify, we provide both.
+        </p>
+        <div className="grid md:grid-cols-2 gap-8 text-left">
           {[
-            { q: 'Is Chify Rehab open 24/7?', a: 'Our Abuja headquarters maintains emergency staff 24/7 for stroke and trauma intake. Scheduled sessions run from 7 AM to 8 PM daily.' },
-            { q: 'Do you accept international insurance?', a: 'Yes, we work with several global carriers. Contact our patient advocacy team for verification.' }
+            { q: 'Is Chify Rehab open 24/7?', a: 'Our Abuja triage center is available 24/7 for critical stroke and trauma admissions. Regular outpatient services are 7 AM - 9 PM.' },
+            { q: 'Do you accept global insurance?', a: 'Yes, Chify is a preferred provider for over 50 international and local HMOs including major global carriers.' }
           ].map((faq, i) => (
-            <FAQItem key={i} question={faq.q} answer={faq.a} />
+            <div key={i} className="p-8 bg-white/5 rounded-3xl border border-white/10">
+              <h5 className="font-bold text-lg mb-4 text-blue-300">{faq.q}</h5>
+              <p className="text-gray-500 font-light leading-relaxed">{faq.a}</p>
+            </div>
           ))}
         </div>
       </div>
@@ -307,19 +312,31 @@ const AboutFullView: React.FC<{ onNavigate: (v: ViewState) => void }> = ({ onNav
   <div className="pt-32 pb-24 px-6 bg-white min-h-screen">
     <div className="max-w-5xl mx-auto">
       <button onClick={() => onNavigate('home')} className="flex items-center gap-2 text-gray-400 hover:text-blue-600 mb-12 transition-colors group">
-        <ArrowLeft size={20} className="group-hover:-translate-x-1 transition-transform" /> Back to Home
+        <ArrowLeft size={20} className="group-hover:-translate-x-2 transition-transform" /> Back to Home
       </button>
-      <ShiningText as="h1" text="Our Legacy of Excellence" className="text-5xl md:text-7xl mb-12 leading-tight" />
-      <div className="grid md:grid-cols-2 gap-16 items-center">
-        <div className="space-y-8">
-          <p className="text-xl text-gray-600 leading-relaxed font-light">
+      <ShiningText as="h1" text="Our Heritage of Excellence" className="text-6xl md:text-8xl mb-16 leading-tight" />
+      <div className="grid md:grid-cols-2 gap-20 items-center mb-24">
+        <div className="space-y-10">
+          <p className="text-2xl text-gray-600 leading-relaxed font-light">
             Founded in 1999, Chify Rehabilitation was born from a vision to revolutionize healthcare in West Africa. We bridged the gap between advanced medical tech and patient-first care.
           </p>
-          <p className="text-gray-500 leading-relaxed">
-            Today, we are a global name in specialized therapy, leading research in neuromodulation and biomechanics at our Abuja R&D center.
+          <p className="text-gray-500 leading-relaxed text-lg">
+            Today, we are Nigeria's most recognized name in specialized therapy, leading research in neuromodulation and robotic gait diagnostics at our Abuja CBD headquarters.
           </p>
+          <div className="flex items-center gap-6">
+             <div className="w-16 h-16 rounded-2xl bg-blue-50 flex items-center justify-center text-blue-600">
+                <Shield size={32} />
+             </div>
+             <div>
+                <p className="font-black text-gray-900">Certified Excellence</p>
+                <p className="text-sm text-gray-400 font-bold uppercase tracking-widest">ISO 9001:2015 Registered</p>
+             </div>
+          </div>
         </div>
-        <SafeImage src="https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?auto=format&fit=crop&w=800&q=80" className="rounded-[3rem] shadow-2xl" alt="Hospital Hall" />
+        <div className="relative">
+           <div className="absolute inset-0 bg-blue-600 rounded-[4rem] translate-x-6 translate-y-6 -z-10" />
+           <SafeImage src="https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?auto=format&fit=crop&w=800&q=80" className="rounded-[4rem] shadow-2xl" alt="Hospital Facility" />
+        </div>
       </div>
     </div>
   </div>
@@ -328,32 +345,37 @@ const AboutFullView: React.FC<{ onNavigate: (v: ViewState) => void }> = ({ onNav
 const ServicesFullView: React.FC<{ onNavigate: (v: ViewState) => void, openService: (s: any) => void }> = ({ onNavigate, openService }) => (
   <div className="pt-32 pb-24 px-6 bg-gray-50 min-h-screen">
     <div className="max-w-7xl mx-auto">
-      <div className="text-center max-w-3xl mx-auto mb-20">
+      <div className="text-center max-w-4xl mx-auto mb-20">
         <button onClick={() => onNavigate('home')} className="inline-flex items-center gap-2 text-gray-400 hover:text-blue-600 mb-8 transition-colors">
           <ArrowLeft size={20} /> Back to Home
         </button>
-        <ShiningText as="h1" text="Our Specialized Departments" className="text-5xl md:text-7xl mb-8" />
-        <p className="text-gray-600 text-xl font-light">Comprehensive care roadmaps for every stage of recovery.</p>
+        <ShiningText as="h1" text="Departmental Overview" className="text-6xl md:text-8xl mb-8" />
+        <p className="text-gray-600 text-2xl font-light">Precision-engineered care roadmaps for every stage of recovery.</p>
       </div>
-      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-10">
+      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-12">
         {SERVICES_DATA.map((service, i) => (
-          <motion.div key={i} whileHover={{ y: -10 }} onClick={() => openService(service)} className="group cursor-pointer bg-white rounded-[2.5rem] overflow-hidden shadow-xl border border-gray-100">
-            <div className="h-64 overflow-hidden relative">
-              <SafeImage src={service.img} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt={service.title} />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-8">
-                <span className="text-white font-bold flex items-center gap-2">View Roadmap <ChevronRight size={18} /></span>
+          <motion.div 
+            key={i} 
+            whileHover={{ y: -10 }} 
+            onClick={() => openService(service)} 
+            className="group cursor-pointer bg-white rounded-[3rem] overflow-hidden shadow-2xl border border-gray-100 flex flex-col"
+          >
+            <div className="h-72 overflow-hidden relative">
+              <SafeImage src={service.img} className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110" alt={service.title} />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-10">
+                <span className="text-white font-black text-lg flex items-center gap-3">View Full Clinical Roadmap <ChevronRight /></span>
               </div>
             </div>
-            <div className="p-10">
-              <div className="w-12 h-12 bg-blue-50 rounded-xl flex items-center justify-center text-blue-600 mb-6 group-hover:bg-blue-600 group-hover:text-white transition-all">
+            <div className="p-12 flex-1">
+              <div className="w-14 h-14 bg-pink-50 rounded-xl flex items-center justify-center text-pink-600 mb-8 group-hover:bg-blue-600 group-hover:text-white transition-all duration-500">
                 {service.icon}
               </div>
-              <h3 className="text-2xl font-black mb-4">{service.title}</h3>
-              <p className="text-gray-500 text-sm leading-relaxed mb-8">{service.desc}</p>
-              <div className="space-y-3">
+              <h3 className="text-3xl font-black mb-6">{service.title}</h3>
+              <p className="text-gray-500 text-lg leading-relaxed mb-10 font-light">{service.desc}</p>
+              <div className="space-y-4">
                 {service.details.map((d, idx) => (
-                  <div key={idx} className="flex items-center gap-2 text-[10px] font-bold text-gray-400 uppercase tracking-widest">
-                    <CheckCircle2 size={12} className="text-pink-500" /> {d}
+                  <div key={idx} className="flex items-center gap-3 text-xs font-black text-gray-400 uppercase tracking-widest">
+                    <CheckCircle2 size={16} className="text-blue-500" /> {d}
                   </div>
                 ))}
               </div>
@@ -368,48 +390,57 @@ const ServicesFullView: React.FC<{ onNavigate: (v: ViewState) => void, openServi
 const ExpertiseFullView: React.FC<{ onNavigate: (v: ViewState) => void }> = ({ onNavigate }) => (
   <div className="pt-32 pb-24 bg-white min-h-screen">
     <div className="max-w-7xl mx-auto px-6">
-      <div className="grid lg:grid-cols-2 gap-20 items-center mb-32">
-        <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }}>
-          <button onClick={() => onNavigate('home')} className="flex items-center gap-2 text-gray-400 hover:text-blue-600 mb-8 transition-colors">
+      <div className="grid lg:grid-cols-2 gap-24 items-center mb-40">
+        <motion.div initial={{ opacity: 0, x: -30 }} animate={{ opacity: 1, x: 0 }}>
+          <button onClick={() => onNavigate('home')} className="flex items-center gap-2 text-gray-400 hover:text-blue-600 mb-12 transition-colors">
             <ArrowLeft size={20} /> Back to Home
           </button>
-          <ShiningText as="h1" text="Clinic Tech & AI" className="text-5xl md:text-7xl mb-8 leading-tight" />
-          <p className="text-gray-600 text-xl leading-relaxed mb-10 font-light">
-            We operate West Africa's most advanced rehab laboratory. From robotic gait correction to AI-powered speech diagnostics, we bring the future of medicine to Abuja.
+          <ShiningText as="h1" text="Clinical R&D Hub" className="text-6xl md:text-8xl mb-10 leading-tight" />
+          <p className="text-gray-600 text-2xl leading-relaxed mb-12 font-light">
+            We operate at the nexus of neuroscience and digital engineering. Our Abuja-based laboratories are developing the tools that define the next generation of human recovery.
           </p>
-          <div className="grid grid-cols-2 gap-8">
-            <div className="p-8 bg-blue-50 rounded-3xl">
-              <h4 className="text-3xl font-black text-blue-600 mb-2">50+</h4>
-              <p className="text-[10px] font-black text-blue-400 uppercase tracking-widest">Active Patents</p>
+          <div className="grid grid-cols-2 gap-10">
+            <div className="p-10 bg-blue-50 rounded-[2.5rem] border border-blue-100">
+              <h4 className="text-5xl font-black text-blue-600 mb-2">50+</h4>
+              <p className="text-xs font-black text-blue-400 uppercase tracking-widest">Active Patents</p>
             </div>
-            <div className="p-8 bg-pink-50 rounded-3xl">
-              <h4 className="text-3xl font-black text-pink-600 mb-2">12</h4>
-              <p className="text-[10px] font-black text-pink-400 uppercase tracking-widest">Research Labs</p>
+            <div className="p-10 bg-pink-50 rounded-[2.5rem] border border-pink-100">
+              <h4 className="text-5xl font-black text-pink-600 mb-2">12</h4>
+              <p className="text-xs font-black text-pink-400 uppercase tracking-widest">Specialized Labs</p>
             </div>
           </div>
         </motion.div>
         <div className="relative">
-          <SafeImage src="https://images.unsplash.com/photo-1579154235602-3c2c2aa5d72f?auto=format&fit=crop&w=1200&q=80" className="rounded-[4rem] shadow-2xl relative z-10" alt="Tech Center" />
-          <div className="absolute -top-10 -right-10 w-64 h-64 bg-pink-100 rounded-full blur-3xl opacity-50" />
+          <SafeImage src="https://images.unsplash.com/photo-1579154235602-3c2c2aa5d72f?auto=format&fit=crop&w=1200&q=80" className="rounded-[4rem] shadow-2xl relative z-10" alt="Tech Excellence" />
+          <div className="absolute -top-16 -right-16 w-80 h-80 bg-pink-100 rounded-full blur-[100px] opacity-40 -z-10" />
         </div>
       </div>
       
-      {/* High Tech Sections */}
-      <div className="space-y-32 py-20">
+      {/* Detailed Technical Sections */}
+      <div className="space-y-40 py-20">
         {[
-          { title: 'Exoskeleton Integration', desc: 'Robotic mobility suits for severe spinal recovery.', icon: <Cpu />, img: 'https://images.unsplash.com/photo-1551076805-e1869033e561?auto=format&fit=crop&w=800' },
-          { title: 'Neural Diagnostics', desc: 'High-frequency brain mapping for neuro-plasticity.', icon: <ZapOff />, img: 'https://images.unsplash.com/photo-1559757175-5700dde675bc?auto=format&fit=crop&w=800' }
+          { title: 'Exoskeleton Integration', desc: 'Custom-fit robotic frames designed to retrain neural pathways in paralyzed patients.', icon: <Cpu />, img: 'https://images.unsplash.com/photo-1551076805-e1869033e561?auto=format&fit=crop&w=800' },
+          { title: 'AI Neuromodulation', desc: 'Utilizing machine learning to optimize brain stimulation protocols for faster stroke recovery.', icon: <ZapOff />, img: 'https://images.unsplash.com/photo-1559757175-5700dde675bc?auto=format&fit=crop&w=800' }
         ].map((item, i) => (
-          <div key={i} className={`flex flex-col md:flex-row gap-16 items-center ${i % 2 !== 0 ? 'md:flex-row-reverse' : ''}`}>
+          <motion.div 
+            key={i} 
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-100px" }}
+            className={`flex flex-col md:flex-row gap-20 items-center ${i % 2 !== 0 ? 'md:flex-row-reverse' : ''}`}
+          >
             <div className="flex-1">
-              <div className="text-blue-600 mb-6">{React.cloneElement(item.icon as React.ReactElement, { size: 40 })}</div>
-              <h3 className="text-3xl font-black mb-6">{item.title}</h3>
-              <p className="text-gray-500 text-lg leading-relaxed">{item.desc}</p>
+              <div className="text-pink-600 mb-10 p-5 bg-pink-50 rounded-3xl inline-block">{React.cloneElement(item.icon as React.ReactElement, { size: 48 })}</div>
+              <h3 className="text-5xl font-black mb-8">{item.title}</h3>
+              <p className="text-gray-500 text-xl leading-relaxed font-light">{item.desc}</p>
+              <button className="mt-12 flex items-center gap-3 text-blue-600 font-black hover:gap-6 transition-all">
+                Download Technical Whitepaper <ChevronRight />
+              </button>
             </div>
-            <div className="flex-1">
-              <SafeImage src={item.img} className="rounded-[3rem] shadow-xl w-full h-[400px]" alt={item.title} />
+            <div className="flex-1 w-full">
+              <SafeImage src={item.img} className="rounded-[4rem] shadow-2xl w-full h-[500px] object-cover" alt={item.title} />
             </div>
-          </div>
+          </motion.div>
         ))}
       </div>
     </div>
@@ -418,15 +449,15 @@ const ExpertiseFullView: React.FC<{ onNavigate: (v: ViewState) => void }> = ({ o
 
 const ContactFullView: React.FC<{ onNavigate: (v: ViewState) => void, onNotify: (msg: string) => void }> = ({ onNavigate, onNotify }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [formData, setFormData] = useState({ name: '', phone: '', focus: 'General Consultation', urgency: '' });
+  const [formData, setFormData] = useState({ name: '', phone: '', focus: 'Immediate Care', urgency: '' });
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
     setTimeout(() => {
       setIsSubmitting(false);
-      onNotify("Emergency request logged. Our Abuja team will contact you within 15 minutes.");
-      setFormData({ name: '', phone: '', focus: 'General Consultation', urgency: '' });
+      onNotify("Emergency request processed. An Abuja triage specialist will contact you in under 15 minutes.");
+      setFormData({ name: '', phone: '', focus: 'Immediate Care', urgency: '' });
     }, 1500);
   };
 
@@ -437,55 +468,64 @@ const ContactFullView: React.FC<{ onNavigate: (v: ViewState) => void, onNotify: 
 
   return (
     <div className="pt-32 pb-24 bg-gray-900 min-h-screen text-white">
-      <div className="max-w-7xl mx-auto px-6 grid lg:grid-cols-2 gap-20">
-        <div>
-          <button onClick={() => onNavigate('home')} className="flex items-center gap-2 text-gray-500 hover:text-white mb-12 transition-colors">
+      <div className="max-w-7xl mx-auto px-6 grid lg:grid-cols-2 gap-24">
+        <motion.div initial={{ opacity: 0, x: -30 }} animate={{ opacity: 1, x: 0 }}>
+          <button onClick={() => onNavigate('home')} className="flex items-center gap-2 text-gray-500 hover:text-white mb-16 transition-colors">
             <ArrowLeft size={20} /> Back to Home
           </button>
-          <ShiningText as="h1" text="Contact Our Hub" className="text-5xl md:text-7xl mb-12" />
-          <p className="text-gray-400 text-xl mb-16 leading-relaxed">Our specialist triage team is based in the Abuja CBD. Available 24/7 for critical care coordination.</p>
-          <div className="space-y-12">
-            <div className="flex gap-8 group">
-              <div className="w-16 h-16 bg-white/5 rounded-2xl flex items-center justify-center text-pink-500 border border-white/10 group-hover:bg-blue-600 group-hover:text-white transition-all logo-glow">
-                <MapPin size={32} />
+          <ShiningText as="h1" text="Contact Global Support" className="text-6xl md:text-8xl mb-12" />
+          <p className="text-gray-400 text-2xl mb-20 leading-relaxed font-light">Our coordination hub in the Abuja CBD is ready to assist you. 24/7 specialized triage support.</p>
+          <div className="space-y-16">
+            <div className="flex gap-10 group">
+              <div className="w-20 h-20 bg-white/5 rounded-3xl flex items-center justify-center text-pink-500 border border-white/10 group-hover:bg-blue-600 group-hover:text-white transition-all duration-500">
+                <MapPin size={40} />
               </div>
               <div>
-                <h4 className="text-2xl font-bold mb-2">Abuja HQ</h4>
-                <p className="text-gray-500 mb-2">Plot 1234, Health Plaza, CBD, Abuja, Nigeria</p>
-                <p className="text-blue-400 font-bold">+234 800 123 4567</p>
+                <h4 className="text-3xl font-black mb-3">Abuja Headquarters</h4>
+                <p className="text-gray-500 text-lg mb-2">Plot 1234, Health Plaza, Central District, Abuja</p>
+                <p className="text-pink-500 font-black text-xl">+234 800 123 4567</p>
               </div>
             </div>
           </div>
-        </div>
+        </motion.div>
 
-        <div className="bg-white rounded-[3rem] p-12 text-gray-900 shadow-2xl relative overflow-hidden">
-          <div className="absolute top-0 right-0 p-8 opacity-5">
-            <img src={LOGO_URL} className="w-32" alt="Brand Background" />
+        <motion.div 
+          initial={{ opacity: 0, y: 30 }} 
+          animate={{ opacity: 1, y: 0 }} 
+          className="bg-white rounded-[4rem] p-16 text-gray-900 shadow-2xl relative overflow-hidden"
+        >
+          <div className="absolute top-0 right-0 p-12 opacity-5 pointer-events-none">
+            <img src={LOGO_URL} className="w-40" alt="Brand Seal Background" />
           </div>
-          <h3 className="text-3xl font-black mb-8 flex items-center gap-3">
-            <div className="w-10 h-10 rounded-full overflow-hidden shadow-md flex-shrink-0 border border-gray-100 logo-glow">
-              <img src={LOGO_URL} className="w-full h-full object-cover" alt="Brand Logo" />
+          <h3 className="text-4xl font-black mb-12 flex items-center gap-4">
+            <div className="w-12 h-12 rounded-full overflow-hidden shadow-lg border border-gray-100">
+              <img src={LOGO_URL} className="w-full h-full object-cover" alt="Brand Mini Logo" />
             </div>
-            Intake Request
+            Secure Patient Intake
           </h3>
-          <form onSubmit={handleSubmit} className="space-y-6">
-            <div className="space-y-2">
-              <label className="text-[10px] font-black uppercase tracking-widest text-gray-400">Full Name</label>
-              <input required name="name" value={formData.name} onChange={handleInputChange} className="w-full bg-gray-50 border-none rounded-2xl px-6 py-4 focus:ring-2 focus:ring-blue-600 outline-none" placeholder="Enter name..." />
+          <form onSubmit={handleSubmit} className="space-y-8">
+            <div className="grid md:grid-cols-2 gap-8">
+              <div className="space-y-3">
+                <label className="text-xs font-black uppercase tracking-[0.2em] text-gray-400">Patient Full Name</label>
+                <input required name="name" value={formData.name} onChange={handleInputChange} className="w-full bg-gray-50 border-none rounded-2xl px-8 py-5 focus:ring-2 focus:ring-blue-600 outline-none font-medium transition-all" placeholder="Enter name..." />
+              </div>
+              <div className="space-y-3">
+                <label className="text-xs font-black uppercase tracking-[0.2em] text-gray-400">Mobile Contact</label>
+                <input required name="phone" value={formData.phone} onChange={handleInputChange} className="w-full bg-gray-50 border-none rounded-2xl px-8 py-5 focus:ring-2 focus:ring-blue-600 outline-none font-medium transition-all" placeholder="+234 ..." />
+              </div>
             </div>
-            <div className="space-y-2">
-              <label className="text-[10px] font-black uppercase tracking-widest text-gray-400">Mobile Number</label>
-              <input required name="phone" value={formData.phone} onChange={handleInputChange} className="w-full bg-gray-50 border-none rounded-2xl px-6 py-4 focus:ring-2 focus:ring-blue-600 outline-none" placeholder="+234 ..." />
+            <div className="space-y-3">
+              <label className="text-xs font-black uppercase tracking-[0.2em] text-gray-400">Nature of Request</label>
+              <textarea name="urgency" value={formData.urgency} onChange={handleInputChange} className="w-full bg-gray-50 border-none rounded-3xl px-8 py-6 focus:ring-2 focus:ring-blue-600 h-40 outline-none font-medium resize-none transition-all" placeholder="How can our clinical team help?" />
             </div>
-            <div className="space-y-2">
-              <label className="text-[10px] font-black uppercase tracking-widest text-gray-400">Brief Note</label>
-              <textarea name="urgency" value={formData.urgency} onChange={handleInputChange} className="w-full bg-gray-50 border-none rounded-2xl px-6 py-4 focus:ring-2 focus:ring-blue-600 h-32 outline-none" placeholder="How can we help?" />
-            </div>
-            <button disabled={isSubmitting} className="w-full bg-blue-600 text-white py-5 rounded-2xl font-black text-lg hover:bg-blue-700 transition-all flex items-center justify-center gap-3">
-              {isSubmitting ? <Loader2 className="animate-spin" /> : "Initiate Consultation"}
+            <button disabled={isSubmitting} className="w-full bg-blue-600 text-white py-6 rounded-3xl font-black text-xl hover:bg-blue-700 transition-all flex items-center justify-center gap-4 shadow-2xl shadow-blue-600/20 btn-shimmer">
+              {isSubmitting ? <Loader2 className="animate-spin" /> : "Initiate Clinical Triage"}
             </button>
+            <div className="text-center">
+               <p className="text-[10px] font-black uppercase tracking-[0.3em] text-gray-300">HIPAA & GDPR Compliant Channel</p>
+            </div>
           </form>
-        </div>
+        </motion.div>
       </div>
     </div>
   );
@@ -494,14 +534,16 @@ const ContactFullView: React.FC<{ onNavigate: (v: ViewState) => void, onNotify: 
 const FAQItem: React.FC<{ question: string; answer: string }> = ({ question, answer }) => {
   const [isOpen, setIsOpen] = useState(false);
   return (
-    <div className="bg-white/5 border border-white/10 rounded-3xl overflow-hidden">
-      <button onClick={() => setIsOpen(!isOpen)} className="w-full p-8 flex justify-between items-center text-left hover:bg-white/5 transition-all">
-        <span className="text-xl font-bold">{question}</span>
-        {isOpen ? <Minus className="text-pink-500" /> : <Plus className="text-blue-400" />}
+    <div className="bg-white/5 border border-white/10 rounded-3xl overflow-hidden transition-all duration-300 hover:bg-white/10">
+      <button onClick={() => setIsOpen(!isOpen)} className="w-full p-10 flex justify-between items-center text-left transition-all">
+        <span className="text-2xl font-black">{question}</span>
+        <motion.div animate={{ rotate: isOpen ? 45 : 0 }} className="text-pink-500">
+          <Plus size={32} />
+        </motion.div>
       </button>
       <AnimatePresence>
         {isOpen && (
-          <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }} className="px-8 pb-8 text-gray-400 leading-relaxed font-light">
+          <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }} className="px-10 pb-10 text-gray-400 text-lg leading-relaxed font-light">
             {answer}
           </motion.div>
         )}
@@ -511,53 +553,61 @@ const FAQItem: React.FC<{ question: string; answer: string }> = ({ question, ans
 };
 
 const Footer: React.FC<{ onNavigate: (v: ViewState) => void }> = ({ onNavigate }) => (
-  <footer className="bg-gray-900 text-white pt-32 pb-16 border-t border-white/5">
-    <div className="max-w-7xl mx-auto px-6 grid md:grid-cols-2 lg:grid-cols-4 gap-20 mb-32">
-      <div>
-        <div className="flex items-center gap-3 mb-10">
-          <div className="w-12 h-12 bg-white rounded-[1.25rem] overflow-hidden flex items-center justify-center shadow-lg logo-glow">
-            <img src={LOGO_URL} alt="Logo" className="w-full h-full object-cover" />
+  <footer className="bg-gray-900 text-white pt-40 pb-20 border-t border-white/5">
+    <div className="max-w-7xl mx-auto px-6 grid md:grid-cols-2 lg:grid-cols-4 gap-24 mb-40">
+      <div className="col-span-1">
+        <div className="flex items-center gap-4 mb-12">
+          <div className="w-16 h-16 bg-white rounded-2xl overflow-hidden flex items-center justify-center shadow-xl">
+            <img src={LOGO_URL} alt="Brand Logo" className="w-full h-full object-cover" />
           </div>
-          <span className="text-3xl font-black tracking-tighter">CHIFY<span className="text-pink-500">REHAB</span></span>
+          <span className="text-4xl font-black tracking-tighter">CHIFY<span className="text-pink-500">REHAB</span></span>
         </div>
-        <p className="text-gray-400 leading-relaxed font-light">Leading clinical rehabilitation across Nigeria since 1999.</p>
+        <p className="text-gray-400 text-xl leading-relaxed font-light">Nigeria's premier rehabilitation hub. Redefining clinical excellence since 1999.</p>
       </div>
       <div>
-        <h4 className="text-xl font-black mb-10 uppercase tracking-widest text-blue-500">Navigation</h4>
-        <ul className="space-y-6 text-gray-400 font-medium">
+        <h4 className="text-xl font-black mb-12 uppercase tracking-[0.3em] text-blue-500">Navigation</h4>
+        <ul className="space-y-8 text-gray-400 text-lg font-medium">
           {['home', 'about', 'services', 'expertise', 'contact'].map(v => (
-            <li key={v}><button onClick={() => onNavigate(v as ViewState)} className="hover:text-white capitalize">{v}</button></li>
+            <li key={v}><button onClick={() => onNavigate(v as ViewState)} className="hover:text-white capitalize transition-colors">{v}</button></li>
           ))}
         </ul>
       </div>
       <div>
-        <h4 className="text-xl font-black mb-10 uppercase tracking-widest text-blue-500">Contact</h4>
-        <ul className="space-y-6 text-gray-400 font-medium">
-          <li className="flex items-start gap-2 text-white">
-            <div className="w-5 h-5 rounded-full overflow-hidden mt-1 logo-glow">
-              <img src={LOGO_URL} className="w-full h-full object-cover" alt="Mini Logo" />
+        <h4 className="text-xl font-black mb-12 uppercase tracking-[0.3em] text-blue-500">Headquarters</h4>
+        <ul className="space-y-8 text-gray-400 text-lg font-medium">
+          <li className="flex items-start gap-4 text-white">
+            <div className="w-6 h-6 rounded-full overflow-hidden mt-1 shadow-glow flex-shrink-0">
+              <img src={LOGO_URL} className="w-full h-full object-cover" alt="Mini Seal" />
             </div>
-            CBD, Abuja, Nigeria
+            CBD, Abuja, FCT, Nigeria
           </li>
-          <li className="flex items-center gap-2">
-            <Phone size={16} className="text-pink-500" /> +234 800 123 4567
+          <li className="flex items-center gap-4">
+            <Phone size={24} className="text-pink-500" /> +234 800 123 4567
+          </li>
+          <li className="flex items-center gap-4">
+            <Mail size={24} className="text-pink-500" /> clinic@chifyrehab.ng
           </li>
         </ul>
       </div>
       <div>
-        <h4 className="text-xl font-black mb-10 uppercase tracking-widest text-blue-500">Stay Updated</h4>
-        <div className="flex gap-2">
-          <input type="email" placeholder="Email..." className="bg-white/5 border border-white/10 rounded-2xl px-6 py-4 flex-1 outline-none" />
-          <button className="bg-blue-600 px-6 rounded-2xl"><ChevronRight /></button>
+        <h4 className="text-xl font-black mb-12 uppercase tracking-[0.3em] text-blue-500">Join Our Circle</h4>
+        <p className="text-gray-400 mb-10 text-lg font-light">Get our clinical research and health updates direct to your inbox.</p>
+        <div className="flex gap-3">
+          <input type="email" placeholder="Email address..." className="bg-white/5 border border-white/10 rounded-2xl px-8 py-5 flex-1 outline-none focus:ring-2 focus:ring-pink-500 transition-all font-medium" />
+          <button className="bg-blue-600 px-8 rounded-2xl hover:bg-blue-700 transition-colors"><ChevronRight /></button>
         </div>
       </div>
     </div>
-    <div className="max-w-7xl mx-auto px-6 pt-16 border-t border-white/5 flex justify-between items-center text-gray-500 text-[10px] font-black uppercase tracking-widest">
-      <div className="flex items-center gap-4">
-        <div className="w-6 h-6 rounded-full overflow-hidden opacity-50 logo-glow">
-          <img src={LOGO_URL} className="w-full h-full object-cover" alt="Mini Branding" />
+    <div className="max-w-7xl mx-auto px-6 pt-20 border-t border-white/5 flex flex-col md:flex-row justify-between items-center text-gray-500 text-[10px] font-black uppercase tracking-[0.4em] gap-10">
+      <div className="flex items-center gap-6">
+        <div className="w-10 h-10 rounded-full overflow-hidden opacity-30">
+          <img src={LOGO_URL} className="w-full h-full object-cover" alt="Brand Footer Seal" />
         </div>
-        <p>&copy; {new Date().getFullYear()} Chify Health Group. All Rights Reserved.</p>
+        <p>&copy; {new Date().getFullYear()} Chify Health Group Nigeria. All Rights Reserved.</p>
+      </div>
+      <div className="flex gap-12">
+         <a href="#" className="hover:text-white transition-colors">Privacy Policy</a>
+         <a href="#" className="hover:text-white transition-colors">Legal Terms</a>
       </div>
     </div>
   </footer>

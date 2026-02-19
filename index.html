@@ -4,10 +4,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Chify Rehabilitation | Healing with Excellence</title>
+  <title>Chify Rehabilitation | World-Class Recovery in Abuja</title>
   
   <!-- Global SEO and Brand Identity -->
-  <meta name="description" content="Chify Rehabilitation - Nigeria's premier center for physical, neurological, and pediatric therapy.">
+  <meta name="description" content="Chify Rehabilitation - Nigeria's premier center for physical, neurological, and pediatric therapy. Pushing the boundaries of human recovery.">
+  
+  <!-- Favicon Implementation -->
   <link rel="icon" type="image/png" href="https://img.js.design/assets/static/f5e386457007e1554625b1854497e246.png">
   <link rel="shortcut icon" type="image/png" href="https://img.js.design/assets/static/f5e386457007e1554625b1854497e246.png">
   <link rel="apple-touch-icon" href="https://img.js.design/assets/static/f5e386457007e1554625b1854497e246.png">
@@ -22,6 +24,7 @@
       font-family: 'Plus Jakarta Sans', sans-serif;
       scroll-behavior: smooth;
       -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
     }
     
     /* Advanced Shining Text Effect */
@@ -31,52 +34,60 @@
     }
     
     .shining-text {
-      background: linear-gradient(90deg, #ec4899, #3b82f6, #ec4899);
+      background: linear-gradient(90deg, #ec4899, #3b82f6, #6366f1, #ec4899);
       background-size: 200% auto;
       color: transparent;
       -webkit-background-clip: text;
       background-clip: text;
-      animation: shine 4s linear infinite;
+      animation: shine 5s linear infinite;
     }
 
-    /* Logo Glow/Shimmer Effect */
-    .logo-glow {
+    /* Button Shimmer Effect */
+    .btn-shimmer {
       position: relative;
       overflow: hidden;
     }
-    .logo-glow::after {
+    .btn-shimmer::after {
       content: "";
       position: absolute;
       top: -50%;
       left: -50%;
       width: 200%;
       height: 200%;
-      background: linear-gradient(45deg, transparent, rgba(255,255,255,0.4), transparent);
+      background: linear-gradient(45deg, transparent, rgba(255,255,255,0.2), transparent);
       transform: rotate(45deg);
-      animation: shimmer 5s infinite;
+      animation: shimmer 4s infinite;
     }
     
     @keyframes shimmer {
       0% { transform: translate(-100%, -100%) rotate(45deg); }
-      25%, 100% { transform: translate(100%, 100%) rotate(45deg); }
+      30%, 100% { transform: translate(100%, 100%) rotate(45deg); }
     }
 
+    /* Logo Glow Effect */
+    .logo-glow {
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 0 15px rgba(236, 72, 153, 0.2);
+    }
+    
     /* Scrollbar Styling */
     ::-webkit-scrollbar {
-      width: 8px;
+      width: 10px;
     }
     ::-webkit-scrollbar-track {
-      background: #f1f1f1;
+      background: #f8fafc;
     }
     ::-webkit-scrollbar-thumb {
       background: #3b82f6;
       border-radius: 10px;
+      border: 3px solid #f8fafc;
     }
     ::-webkit-scrollbar-thumb:hover {
       background: #ec4899;
     }
 
-    /* Custom Shape Dividers */
+    /* Shape Dividers */
     .custom-shape-divider-bottom-1678123456 {
         position: absolute;
         bottom: 0;

@@ -1,14 +1,11 @@
 
 import { GoogleGenAI } from "@google/genai";
 
-const API_KEY = process.env.API_KEY;
-
+// Fix: Removed environment variable caching and pre-checks.
+// Followed guideline to use process.env.API_KEY directly in constructor.
 export const generateRehabAdvice = async (userPrompt: string) => {
-  if (!API_KEY) {
-    throw new Error("API Key is missing. Please ensure process.env.API_KEY is configured.");
-  }
-
-  const ai = new GoogleGenAI({ apiKey: API_KEY });
+  // Fix: Initializing GoogleGenAI with named parameter and direct process.env reference
+  const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
   
   try {
     const response = await ai.models.generateContent({
@@ -20,6 +17,7 @@ export const generateRehabAdvice = async (userPrompt: string) => {
       },
     });
 
+    // Fix: Access response.text directly (property, not a function)
     return response.text;
   } catch (error) {
     console.error("Error generating advice:", error);

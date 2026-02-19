@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import ShiningText from './ShiningText';
+import SafeImage from './SafeImage';
 import { Slide } from '../types';
 
 const slides: Slide[] = [
@@ -58,9 +59,10 @@ const HeroSlider: React.FC = () => {
           transition={{ duration: 1.8, ease: "easeOut" }}
           className="absolute inset-0"
         >
-          <div 
-            className="absolute inset-0 bg-cover bg-center"
-            style={{ backgroundImage: `url(${slides[current].image})` }}
+          <SafeImage 
+            src={slides[current].image} 
+            alt={slides[current].title} 
+            className="absolute inset-0 w-full h-full"
           />
           <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/40 to-transparent" />
         </motion.div>
