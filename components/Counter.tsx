@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
-import { useInView } from 'framer-motion';
+import { useInView, animate } from 'framer-motion';
 
 interface CounterProps {
   target: number;
@@ -8,33 +8,25 @@ interface CounterProps {
   suffix?: string;
 }
 
-const Counter: React.FC<CounterProps> = ({ target, duration = 2000, suffix = "" }) => {
+const Counter: React.FC<CounterProps> = ({ target, duration = 2, suffix = "" }) => {
   const [count, setCount] = useState(0);
   const ref = React.useRef(null);
   const isInView = useInView(ref, { once: true });
 
   useEffect(() => {
     if (isInView) {
-      let start = 0;
-      const end = target;
-      if (start === end) return;
-
-      let totalMiliseconds = duration;
-      let incrementTime = (totalMiliseconds / end);
-
-      let timer = setInterval(() => {
-        start += 1;
-        setCount(start);
-        if (start === end) clearInterval(timer);
-      }, incrementTime);
-
-      return () => clearInterval(timer);
+      const controls = animate(0, target, {
+        duration: duration,
+        ease: "easeOut",
+        onUpdate: (value) => setCount(Math.floor(value)),
+      });
+      return () => controls.stop();
     }
   }, [isInView, target, duration]);
 
   return (
     <span ref={ref} className="tabular-nums">
-      {count}{suffix}
+      {count.toLocaleString()}{suffix}
     </span>
   );
 };

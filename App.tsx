@@ -30,8 +30,15 @@ import {
   Quote,
   Zap,
   Shield,
-  Clock4
+  Loader2,
+  Bell,
+  Waves,
+  ZapOff,
+  Dna,
+  Cpu
 } from 'lucide-react';
+
+const LOGO_URL = "https://img.js.design/assets/static/f5e386457007e1554625b1854497e246.png";
 
 const SERVICES_DATA = [
   { 
@@ -47,7 +54,7 @@ const SERVICES_DATA = [
     desc: 'Focused care for stroke, brain injury, and spinal cord condition recovery.', 
     longDesc: 'Recovery from neurological injury requires a specialized, multidisciplinary approach. Our neuro-rehab program focuses on neuroplasticity, helping patients relearn skills and adapt to changes in their nervous system with cutting-edge robotic assistance.',
     icon: <BrainCircuit className="text-blue-500" />,
-    img: 'https://images.unsplash.com/photo-1551076805-e1869033e561?auto=format&fit=crop&q=80&w=800',
+    img: 'https://images.unsplash.com/photo-1551076805-e1869033e561?auto=format&fit=crop&w=800&q=80',
     details: ['Stroke Recovery', 'Brain Injury Care', 'Spinal Support', 'Robotic Assistance']
   },
   { 
@@ -55,7 +62,7 @@ const SERVICES_DATA = [
     desc: 'Specialized therapy for developmental delays and childhood physical challenges.', 
     longDesc: 'Children are not just small adults. Our pediatric specialists use play-based therapy to help children reach developmental milestones, overcome physical limitations, and participate fully in school and play.',
     icon: <Baby className="text-pink-500" />,
-    img: 'https://images.unsplash.com/photo-1516627145497-ae6968895b74?auto=format&fit=crop&q=80&w=800',
+    img: 'https://images.unsplash.com/photo-1516627145497-ae6968895b74?auto=format&fit=crop&w=800&q=80',
     details: ['Developmental Screening', 'Sensory Integration', 'Play Therapy', 'Parent Training']
   },
   { 
@@ -63,7 +70,7 @@ const SERVICES_DATA = [
     desc: 'Helping you regain the skills needed for daily living and work tasks.', 
     longDesc: 'We focus on "occupations"—the activities that give life meaning. Our OTs work with you to modify environments and develop skills for self-care, productivity, and leisure, ensuring you can live life to its fullest.',
     icon: <Users className="text-blue-500" />,
-    img: 'https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?auto=format&fit=crop&q=80&w=800',
+    img: 'https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?auto=format&fit=crop&w=800&q=80',
     details: ['Daily Living Skills', 'Ergonomic Assessment', 'Adaptive Equipment', 'Home Modification']
   },
   { 
@@ -71,7 +78,7 @@ const SERVICES_DATA = [
     desc: 'Comprehensive evaluation and treatment of communication and swallowing disorders.', 
     longDesc: 'Our speech-language pathologists provide expert care for individuals with communication difficulties, voice disorders, and swallowing problems (dysphagia). We use the latest diagnostic tools to create effective treatment plans.',
     icon: <Stethoscope className="text-pink-500" />,
-    img: 'https://images.unsplash.com/photo-1559757175-5700dde675bc?auto=format&fit=crop&q=80&w=800',
+    img: 'https://images.unsplash.com/photo-1559757175-5700dde675bc?auto=format&fit=crop&w=800&q=80',
     details: ['Articulation Therapy', 'Swallowing Safety', 'Cognitive Support', 'Voice Coaching']
   },
   { 
@@ -79,22 +86,37 @@ const SERVICES_DATA = [
     desc: 'High-performance rehabilitation for athletes to return to peak condition.', 
     longDesc: 'Return to the field faster and stronger. Our sports medicine team focuses on biomechanics and performance optimization to not only heal injuries but prevent future ones.',
     icon: <Activity className="text-blue-500" />,
-    img: 'https://images.unsplash.com/photo-1594882645126-14020914d58d?auto=format&fit=crop&q=80&w=800',
+    img: 'https://images.unsplash.com/photo-1594882645126-14020914d58d?auto=format&fit=crop&w=800&q=80',
     details: ['Athletic Screening', 'Performance Training', 'Injury Prevention', 'Rapid Recovery']
   }
 ];
 
 type ViewState = 'home' | 'about' | 'services' | 'expertise' | 'contact';
 
+interface Toast {
+  id: string;
+  message: string;
+  type: 'success' | 'error';
+}
+
 const App: React.FC = () => {
   const [currentView, setCurrentView] = useState<ViewState>('home');
   const [selectedService, setSelectedService] = useState<typeof SERVICES_DATA[0] | null>(null);
   const [isServiceModalOpen, setIsServiceModalOpen] = useState(false);
+  const [toasts, setToasts] = useState<Toast[]>([]);
 
   // Scroll to top on view change
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [currentView]);
+
+  const addToast = (message: string, type: 'success' | 'error' = 'success') => {
+    const id = Math.random().toString(36).substr(2, 9);
+    setToasts(prev => [...prev, { id, message, type }]);
+    setTimeout(() => {
+      setToasts(prev => prev.filter(t => t.id !== id));
+    }, 5000);
+  };
 
   const openService = (service: typeof SERVICES_DATA[0]) => {
     setSelectedService(service);
@@ -110,7 +132,7 @@ const App: React.FC = () => {
       case 'expertise':
         return <ExpertiseFullView onNavigate={setCurrentView} />;
       case 'contact':
-        return <ContactFullView onNavigate={setCurrentView} />;
+        return <ContactFullView onNavigate={setCurrentView} onNotify={addToast} />;
       default:
         return <HomeLandingView onNavigate={setCurrentView} openService={openService} />;
     }
@@ -120,6 +142,35 @@ const App: React.FC = () => {
     <div className="min-h-screen bg-white">
       <Navbar currentView={currentView} onNavigate={setCurrentView} />
       
+      {/* Toast Notifications */}
+      <div className="fixed top-24 right-6 z-[100] flex flex-col gap-4 pointer-events-none">
+        <AnimatePresence>
+          {toasts.map((toast) => (
+            <motion.div
+              key={toast.id}
+              initial={{ opacity: 0, x: 50, scale: 0.8 }}
+              animate={{ opacity: 1, x: 0, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.5, transition: { duration: 0.2 } }}
+              className="pointer-events-auto bg-white border-l-4 border-blue-600 rounded-2xl shadow-2xl p-6 flex items-start gap-4 min-w-[320px] max-w-md relative overflow-hidden"
+            >
+              <div className="bg-blue-50 p-2 rounded-xl text-blue-600">
+                <Bell size={24} />
+              </div>
+              <div className="flex-1">
+                <p className="font-black text-gray-900 text-sm uppercase tracking-wider mb-1">System Notification</p>
+                <p className="text-gray-600 font-medium leading-relaxed">{toast.message}</p>
+              </div>
+              <motion.div 
+                initial={{ width: '100%' }}
+                animate={{ width: '0%' }}
+                transition={{ duration: 5, ease: 'linear' }}
+                className="absolute bottom-0 left-0 h-1 bg-pink-500"
+              />
+            </motion.div>
+          ))}
+        </AnimatePresence>
+      </div>
+
       <AnimatePresence mode="wait">
         <motion.div
           key={currentView}
@@ -165,7 +216,7 @@ const HomeLandingView: React.FC<{ onNavigate: (v: ViewState) => void, openServic
     <section className="py-24 bg-white">
       <div className="max-w-7xl mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-12 text-center">
         {[
-          { label: 'Patient Recoveries', value: 15000, suffix: '+', icon: <HeartPulse className="text-pink-500 mx-auto mb-4" size={32} /> },
+          { label: 'Patient Recoveries', value: 15000, suffix: '+', icon: <div className="w-12 h-12 mx-auto mb-4 rounded-full overflow-hidden shadow-xl shadow-pink-500/30 transform hover:scale-110 transition-transform"><img src={LOGO_URL} className="w-full h-full object-cover" /></div> },
           { label: 'Specialists', value: 120, suffix: '+', icon: <Users className="text-blue-500 mx-auto mb-4" size={32} /> },
           { label: 'Centers Nationally', value: 45, suffix: '', icon: <Globe className="text-pink-500 mx-auto mb-4" size={32} /> },
           { label: 'Years Excellence', value: 25, suffix: '', icon: <Trophy className="text-blue-500 mx-auto mb-4" size={32} /> },
@@ -376,7 +427,7 @@ const HomeLandingView: React.FC<{ onNavigate: (v: ViewState) => void, openServic
     {/* FAQ Section */}
     <section className="py-32 bg-gray-900 text-white overflow-hidden relative">
       <div className="absolute top-0 right-0 p-20 opacity-5">
-        <HeartPulse size={400} />
+        <img src={LOGO_URL} className="w-[400px] opacity-10 blur-sm grayscale" />
       </div>
       <div className="max-w-4xl mx-auto px-6 relative z-10">
         <div className="text-center mb-20">
@@ -447,7 +498,7 @@ const FAQItem: React.FC<{ question: string; answer: string }> = ({ question, ans
   );
 };
 
-// --- Full Page Components (Keeping them intact from previous version) ---
+// --- Full Page Components ---
 
 const AboutFullView: React.FC<{ onNavigate: (v: ViewState) => void }> = ({ onNavigate }) => (
   <div className="pt-32 pb-24 px-6 bg-white min-h-screen">
@@ -570,7 +621,7 @@ const ExpertiseFullView: React.FC<{ onNavigate: (v: ViewState) => void }> = ({ o
           </button>
           <ShiningText as="h1" text="Clinical Technology & AI" className="text-5xl md:text-7xl mb-8 leading-tight" />
           <p className="text-gray-600 text-xl leading-relaxed mb-10 font-light">
-            We operate at the intersection of medical science and deep technology. Our research labs develop the tools that define the future of human mobility.
+            We operate at the intersection of medical science and deep technology. Our Abuja-based research labs develop the tools that define the future of human mobility and neuro-recovery.
           </p>
           <div className="grid grid-cols-2 gap-8">
             <div className="p-8 bg-blue-50 rounded-3xl">
@@ -589,119 +640,246 @@ const ExpertiseFullView: React.FC<{ onNavigate: (v: ViewState) => void }> = ({ o
         </div>
       </div>
 
-      <div className="space-y-24">
+      <div className="space-y-32">
         {[
           { 
             title: 'Exoskeleton Integration', 
-            text: 'We utilize robotic exoskeletons to help paralyzed patients stand and walk, inducing neural pathways to rebuild through repetitive motion.',
-            img: 'https://images.unsplash.com/photo-1551076805-e1869033e561?auto=format&fit=crop&w=800&q=80'
+            text: 'We utilize robotic exoskeletons to help paralyzed patients stand and walk, inducing neural pathways to rebuild through repetitive motion and structural feedback loops.',
+            img: 'https://images.unsplash.com/photo-1551076805-e1869033e561?auto=format&fit=crop&w=800&q=80',
+            icon: <Cpu className="text-blue-600" size={32} />
+          },
+          { 
+            title: 'Neuromodulation Labs', 
+            text: 'Our Abuja center features non-invasive brain stimulation technologies (TMS and tDCS) to accelerate recovery in stroke and severe traumatic brain injury cases by exciting dormant neural clusters.',
+            img: 'https://images.unsplash.com/photo-1559757175-5700dde675bc?auto=format&fit=crop&w=800&q=80',
+            icon: <ZapOff className="text-pink-600" size={32} />
           },
           { 
             title: 'VR-Cognitive Therapy', 
-            text: 'Virtual Reality environments allow patients to practice complex motor tasks in safe, controlled, and immersive scenarios, speeding up neurological recovery.',
-            img: 'https://images.unsplash.com/photo-1622979135225-d2ba269cf1ac?auto=format&fit=crop&w=800&q=80'
+            text: 'Virtual Reality environments allow patients to practice complex motor tasks in safe, controlled, and immersive scenarios, providing millisecond-level feedback for neurological adjustment.',
+            img: 'https://images.unsplash.com/photo-1622979135225-d2ba269cf1ac?auto=format&fit=crop&w=800&q=80',
+            icon: <Globe className="text-blue-600" size={32} />
+          },
+          { 
+            title: 'Hydro-Dynamic Recovery', 
+            text: 'Our specialized aquatic therapy units use variable current pools to provide resistance and buoyancy, allowing patients with severe orthopedic trauma to begin movement weeks earlier than traditional methods.',
+            img: 'https://images.unsplash.com/photo-1594882645126-14020914d58d?auto=format&fit=crop&w=800&q=80',
+            icon: <Waves className="text-pink-600" size={32} />
+          },
+          { 
+            title: 'Wearable EMG Biofeedback', 
+            text: 'Patients are equipped with wireless muscle activity sensors that transmit real-time data to therapist dashboards, ensuring every rep of every exercise is performed with perfect clinical accuracy.',
+            img: 'https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?auto=format&fit=crop&w=800&q=80',
+            icon: <Activity className="text-blue-600" size={32} />
+          },
+          { 
+            title: 'Regenerative Bio-Therapy', 
+            text: 'In partnership with global research institutions, Chify facilitates clinical access to tissue engineering and cellular therapies aimed at repairing damaged ligamentous and neural structures.',
+            img: 'https://images.unsplash.com/photo-1530026405186-ed1f139313f8?auto=format&fit=crop&w=800&q=80',
+            icon: <Dna className="text-pink-600" size={32} />
           },
           { 
             title: 'AI Gait Analysis', 
-            text: 'Computer vision algorithms analyze a patient\'s walk in real-time, identifying millimetric imbalances that the human eye misses, allowing for perfect corrective plans.',
-            img: 'https://images.unsplash.com/photo-1526232761682-d26e4fca6042?auto=format&fit=crop&w=800&q=80'
+            text: 'High-speed computer vision algorithms analyze a patient\'s walk in real-time, identifying millimetric imbalances that the human eye misses, allowing for perfect corrective custom orthotics and plans.',
+            img: 'https://images.unsplash.com/photo-1526232761682-d26e4fca6042?auto=format&fit=crop&w=800&q=80',
+            icon: <Zap className="text-blue-600" size={32} />
           }
         ].map((item, i) => (
-          <div key={i} className={`grid md:grid-cols-2 gap-16 items-center ${i % 2 !== 0 ? 'md:flex-row-reverse' : ''}`}>
-            <div className={i % 2 !== 0 ? 'order-2' : ''}>
+          <motion.div 
+            key={i} 
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-100px" }}
+            className={`grid md:grid-cols-2 gap-16 items-center ${i % 2 !== 0 ? 'md:flex-row-reverse' : ''}`}
+          >
+            <div className={i % 2 !== 0 ? 'md:order-2' : ''}>
+              <div className="mb-6">{item.icon}</div>
               <h3 className="text-3xl font-black mb-6">{item.title}</h3>
               <p className="text-gray-600 text-lg leading-relaxed">{item.text}</p>
+              <div className="mt-8 flex items-center gap-2 text-blue-600 font-bold">
+                Learn Technical Specs <ChevronRight size={16} />
+              </div>
             </div>
-            <img src={item.img} className="rounded-3xl shadow-xl h-96 object-cover" alt={item.title} />
-          </div>
+            <div className={`relative ${i % 2 !== 0 ? 'md:order-1' : ''}`}>
+              <div className={`absolute -inset-4 bg-gradient-to-tr ${i % 2 === 0 ? 'from-blue-100 to-transparent' : 'from-pink-100 to-transparent'} rounded-[3rem] -z-10`} />
+              <img src={item.img} className="rounded-[3rem] shadow-xl h-[450px] w-full object-cover" alt={item.title} />
+            </div>
+          </motion.div>
         ))}
       </div>
+
+      {/* Lab Tour Section */}
+      <section className="mt-48 py-24 bg-gray-50 rounded-[4rem] px-12 text-center relative overflow-hidden">
+        <div className="absolute top-0 left-0 w-64 h-64 -translate-x-1/2 -translate-y-1/2 opacity-10">
+          <img src={LOGO_URL} className="w-full h-full grayscale" />
+        </div>
+        <h4 className="text-blue-600 font-black uppercase tracking-widest text-sm mb-4">Innovation Access</h4>
+        <h2 className="text-4xl md:text-5xl font-black mb-10">Visit Our Abuja R&D Lab</h2>
+        <p className="max-w-2xl mx-auto text-gray-500 text-lg mb-12">We offer guided tours for medical professionals and prospective patients to see our technology in action. Experience the future of rehab first-hand.</p>
+        <button onClick={() => onNavigate('contact')} className="bg-gray-900 text-white px-12 py-5 rounded-full font-black hover:bg-black transition-all">
+          Book a Clinical Tour
+        </button>
+      </section>
     </div>
   </div>
 );
 
-const ContactFullView: React.FC<{ onNavigate: (v: ViewState) => void }> = ({ onNavigate }) => (
-  <div className="pt-32 pb-24 bg-gray-900 min-h-screen text-white">
-    <div className="max-w-7xl mx-auto px-6">
-      <button onClick={() => onNavigate('home')} className="flex items-center gap-2 text-gray-500 hover:text-white mb-12 transition-colors">
-        <ArrowLeft size={20} /> Back to Home
-      </button>
-      
-      <div className="grid lg:grid-cols-2 gap-20">
-        <div>
-          <ShiningText as="h1" text="Contact Global Support" className="text-5xl md:text-7xl mb-12" />
-          <p className="text-gray-400 text-xl mb-16 leading-relaxed">
-            Our global response team is available 24/7 for emergency intake and clinical inquiries. Find our primary hubs below or send a secure message.
-          </p>
-          
-          <div className="space-y-12">
-            {[
-              { city: 'San Francisco (Global HQ)', address: '123 Healing Way, Medical District', phone: '+1 (415) 555-0199' },
-              { city: 'London (European Hub)', address: '45 Care Street, Westminster', phone: '+44 20 7946 0958' },
-              { city: 'Singapore (Asia Pacific)', address: '88 Recovery Blvd, Health City', phone: '+65 6789 0123' },
-            ].map((hub, i) => (
-              <div key={i} className="flex gap-8 group">
+const ContactFullView: React.FC<{ onNavigate: (v: ViewState) => void, onNotify: (msg: string) => void }> = ({ onNavigate, onNotify }) => {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [formData, setFormData] = useState({
+    name: '',
+    phone: '',
+    focus: 'Immediate Stroke Rehab',
+    urgency: ''
+  });
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    // Simulate API call
+    setTimeout(() => {
+      setIsSubmitting(false);
+      onNotify("Your emergency intake request has been securely logged. A clinical specialist from our Abuja headquarters will call you within 15 minutes.");
+      // Refresh form input
+      setFormData({
+        name: '',
+        phone: '',
+        focus: 'Immediate Stroke Rehab',
+        urgency: ''
+      });
+    }, 1500);
+  };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+  };
+
+  return (
+    <div className="pt-32 pb-24 bg-gray-900 min-h-screen text-white">
+      <div className="max-w-7xl mx-auto px-6">
+        <button onClick={() => onNavigate('home')} className="flex items-center gap-2 text-gray-500 hover:text-white mb-12 transition-colors">
+          <ArrowLeft size={20} /> Back to Home
+        </button>
+        
+        <div className="grid lg:grid-cols-2 gap-20">
+          <div>
+            <ShiningText as="h1" text="Contact Global Support" className="text-5xl md:text-7xl mb-12" />
+            <p className="text-gray-400 text-xl mb-16 leading-relaxed">
+              Our specialized response team is based at our Nigerian Headquarters in Abuja. Send a secure message or call our direct emergency line.
+            </p>
+            
+            <div className="space-y-12">
+              <div className="flex gap-8 group">
                 <div className="w-16 h-16 bg-white/5 rounded-2xl flex items-center justify-center text-pink-500 border border-white/10 group-hover:bg-blue-600 group-hover:text-white transition-all">
                   <MapPin size={32} />
                 </div>
                 <div>
-                  <h4 className="text-2xl font-bold mb-2">{hub.city}</h4>
-                  <p className="text-gray-500 mb-2">{hub.address}</p>
-                  <p className="text-blue-400 font-bold">{hub.phone}</p>
+                  <h4 className="text-2xl font-bold mb-2">Abuja (Nigerian HQ)</h4>
+                  <p className="text-gray-500 mb-2">Plot 1234, Health Plaza, Central Business District, Abuja, FCT, Nigeria</p>
+                  <p className="text-blue-400 font-bold">+234 800 123 4567</p>
+                  <p className="text-gray-500 text-sm mt-2">Open 24/7 for Emergencies</p>
                 </div>
               </div>
-            ))}
+            </div>
           </div>
-        </div>
 
-        <div className="bg-white rounded-[3rem] p-12 lg:p-16 text-gray-900 shadow-2xl">
-          <h3 className="text-3xl font-black mb-8">Clinical Inquiry Form</h3>
-          <form className="space-y-8">
-            <div className="grid md:grid-cols-2 gap-8">
-              <div className="space-y-2">
-                <label className="text-xs font-black uppercase tracking-widest text-gray-400">Patient Name</label>
-                <input type="text" className="w-full bg-gray-50 border-none rounded-2xl px-6 py-4 focus:ring-2 focus:ring-blue-600 transition-all" placeholder="Enter name..." />
+          <div className="bg-white rounded-[3rem] p-12 lg:p-16 text-gray-900 shadow-2xl relative overflow-hidden">
+            <div className="absolute top-0 right-0 p-8 opacity-5">
+              <img src={LOGO_URL} className="w-32" />
+            </div>
+            <h3 className="text-3xl font-black mb-8 flex items-center gap-3">
+              <div className="w-8 h-8 rounded-full overflow-hidden shadow-md flex-shrink-0 border border-gray-100">
+                <img src={LOGO_URL} className="w-full h-full object-cover" />
+              </div>
+              Emergency Intake Form
+            </h3>
+            <form onSubmit={handleSubmit} className="space-y-8">
+              <div className="grid md:grid-cols-2 gap-8">
+                <div className="space-y-2">
+                  <label className="text-xs font-black uppercase tracking-widest text-gray-400">Patient Name</label>
+                  <input 
+                    required 
+                    type="text" 
+                    name="name"
+                    value={formData.name}
+                    onChange={handleInputChange}
+                    className="w-full bg-gray-50 border-none rounded-2xl px-6 py-4 focus:ring-2 focus:ring-blue-600 transition-all outline-none" 
+                    placeholder="Enter name..." 
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-xs font-black uppercase tracking-widest text-gray-400">Nigerian Mobile</label>
+                  <input 
+                    required 
+                    type="tel" 
+                    name="phone"
+                    value={formData.phone}
+                    onChange={handleInputChange}
+                    className="w-full bg-gray-50 border-none rounded-2xl px-6 py-4 focus:ring-2 focus:ring-blue-600 transition-all outline-none" 
+                    placeholder="+234 ..." 
+                  />
+                </div>
               </div>
               <div className="space-y-2">
-                <label className="text-xs font-black uppercase tracking-widest text-gray-400">Email Contact</label>
-                <input type="email" className="w-full bg-gray-50 border-none rounded-2xl px-6 py-4 focus:ring-2 focus:ring-blue-600 transition-all" placeholder="email@address.com" />
+                <label className="text-xs font-black uppercase tracking-widest text-gray-400">Clinical Focus</label>
+                <select 
+                  name="focus"
+                  value={formData.focus}
+                  onChange={handleInputChange}
+                  className="w-full bg-gray-50 border-none rounded-2xl px-6 py-4 focus:ring-2 focus:ring-blue-600 transition-all appearance-none outline-none"
+                >
+                  <option>Immediate Stroke Rehab</option>
+                  <option>Post-Operative Orthopedic</option>
+                  <option>Pediatric Emergency Screening</option>
+                  <option>Brain Injury Consultation</option>
+                </select>
               </div>
-            </div>
-            <div className="space-y-2">
-              <label className="text-xs font-black uppercase tracking-widest text-gray-400">Case Category</label>
-              <select className="w-full bg-gray-50 border-none rounded-2xl px-6 py-4 focus:ring-2 focus:ring-blue-600 transition-all appearance-none">
-                <option>New Patient Admission</option>
-                <option>Provider Referral</option>
-                <option>Clinical Research Partnership</option>
-                <option>Career Inquiry</option>
-              </select>
-            </div>
-            <div className="space-y-2">
-              <label className="text-xs font-black uppercase tracking-widest text-gray-400">Medical Summary</label>
-              <textarea className="w-full bg-gray-50 border-none rounded-2xl px-6 py-4 focus:ring-2 focus:ring-blue-600 transition-all h-40 resize-none" placeholder="Please describe the condition briefly..."></textarea>
-            </div>
-            <button className="w-full bg-blue-600 text-white py-5 rounded-2xl font-black text-lg hover:bg-blue-700 hover:scale-[1.02] active:scale-[0.98] transition-all shadow-xl shadow-blue-600/20">
-              Submit Secure Inquiry
-            </button>
-            <p className="text-center text-xs text-gray-400 font-medium">Your data is protected by global HIPAA & GDPR standards.</p>
-          </form>
+              <div className="space-y-2">
+                <label className="text-xs font-black uppercase tracking-widest text-gray-400">Nature of Urgency</label>
+                <textarea 
+                  required 
+                  name="urgency"
+                  value={formData.urgency}
+                  onChange={handleInputChange}
+                  className="w-full bg-gray-50 border-none rounded-2xl px-6 py-4 focus:ring-2 focus:ring-blue-600 transition-all h-40 resize-none outline-none" 
+                  placeholder="Briefly describe the clinical urgency..."
+                ></textarea>
+              </div>
+              <button 
+                disabled={isSubmitting}
+                className="w-full bg-blue-600 text-white py-5 rounded-2xl font-black text-lg hover:bg-blue-700 hover:scale-[1.02] active:scale-[0.98] transition-all shadow-xl shadow-blue-600/20 flex items-center justify-center gap-3"
+              >
+                {isSubmitting ? (
+                  <>
+                    <Loader2 className="animate-spin" /> Logging Intake Data...
+                  </>
+                ) : (
+                  "Initiate Secure Booking"
+                )}
+              </button>
+              <div className="flex items-center justify-center gap-2 text-xs text-gray-400 font-bold uppercase tracking-widest">
+                <ShieldCheck size={14} className="text-blue-500" /> Secure HIPAA Compliant Channel
+              </div>
+            </form>
+          </div>
         </div>
       </div>
     </div>
-  </div>
-);
+  );
+};
 
 const Footer: React.FC<{ onNavigate: (v: ViewState) => void }> = ({ onNavigate }) => (
   <footer className="bg-gray-900 text-white pt-32 pb-16 border-t border-white/5">
     <div className="max-w-7xl mx-auto px-6 grid md:grid-cols-2 lg:grid-cols-4 gap-20 mb-32">
       <div>
-        <div className="flex items-center gap-2 mb-10">
-          <div className="w-12 h-12 bg-pink-500 rounded-[1.25rem] flex items-center justify-center text-white">
-            <HeartPulse size={28} />
+        <div className="flex items-center gap-3 mb-10">
+          <div className="w-12 h-12 bg-white rounded-[1.25rem] overflow-hidden flex items-center justify-center shadow-lg transform hover:rotate-6 transition-transform">
+            <img src={LOGO_URL} alt="Chify Logo" className="w-full h-full object-cover" />
           </div>
           <span className="text-3xl font-black tracking-tighter">CHIFY<span className="text-pink-500">REHAB</span></span>
         </div>
-        <p className="text-gray-400 leading-relaxed text-lg font-light mb-10">Restoring human potential through a unique blend of empathy and advanced robotics.</p>
+        <p className="text-gray-400 leading-relaxed text-lg font-light mb-10">Nigeria's premier rehabilitation center. Combining empathy with global clinical standards.</p>
       </div>
 
       <div>
@@ -716,13 +894,22 @@ const Footer: React.FC<{ onNavigate: (v: ViewState) => void }> = ({ onNavigate }
       </div>
 
       <div>
-        <h4 className="text-xl font-black mb-10 uppercase tracking-widest text-blue-500">Global Hubs</h4>
+        <h4 className="text-xl font-black mb-10 uppercase tracking-widest text-blue-500">Location Hub</h4>
         <ul className="space-y-6 text-gray-400 font-medium">
-          <li>San Francisco</li>
-          <li>London</li>
-          <li>Singapore</li>
-          <li>Dubai</li>
-          <li>Sydney</li>
+          <li className="flex items-start gap-2 text-white">
+            <div className="w-5 h-5 rounded-full overflow-hidden flex-shrink-0 mt-1">
+              <img src={LOGO_URL} className="w-full h-full object-cover" />
+            </div>
+            CBD, Abuja, Nigeria
+          </li>
+          <li className="flex items-center gap-2">
+            <Phone size={16} className="text-pink-500" />
+            +234 800 123 4567
+          </li>
+          <li className="flex items-center gap-2">
+            <Mail size={16} className="text-pink-500" />
+            contact@chifyrehab.ng
+          </li>
         </ul>
       </div>
 
@@ -730,14 +917,19 @@ const Footer: React.FC<{ onNavigate: (v: ViewState) => void }> = ({ onNavigate }
         <h4 className="text-xl font-black mb-10 uppercase tracking-widest text-blue-500">Updates</h4>
         <p className="text-gray-400 mb-8 font-light">Join 10k+ professionals getting our clinical newsletter.</p>
         <div className="flex gap-2">
-          <input type="email" placeholder="email@address.com" className="bg-white/5 border border-white/10 rounded-2xl px-6 py-4 flex-1 focus:ring-1 focus:ring-pink-500" />
+          <input type="email" placeholder="email@address.com" className="bg-white/5 border border-white/10 rounded-2xl px-6 py-4 flex-1 focus:ring-1 focus:ring-pink-500 outline-none" />
           <button className="bg-blue-600 px-6 rounded-2xl hover:bg-blue-700 transition-colors"><ChevronRight /></button>
         </div>
       </div>
     </div>
     
     <div className="max-w-7xl mx-auto px-6 pt-16 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-8 text-gray-500 text-xs font-black uppercase tracking-widest">
-      <p>&copy; {new Date().getFullYear()} Chify Health Group. All Rights Reserved.</p>
+      <div className="flex items-center gap-4">
+        <div className="w-6 h-6 rounded-full overflow-hidden opacity-50 grayscale hover:grayscale-0 transition-all">
+          <img src={LOGO_URL} className="w-full h-full object-cover" />
+        </div>
+        <p>&copy; {new Date().getFullYear()} Chify Health Group Nigeria. All Rights Reserved.</p>
+      </div>
       <div className="flex gap-10">
         <a href="#" className="hover:text-white">Privacy</a>
         <a href="#" className="hover:text-white">Legal</a>

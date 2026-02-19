@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
-import { Heart, Menu, X } from 'lucide-react';
+import { Menu, X } from 'lucide-react';
 
 interface NavbarProps {
   currentView: string;
@@ -10,6 +10,9 @@ interface NavbarProps {
 const Navbar: React.FC<NavbarProps> = ({ currentView, onNavigate }) => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  // Logo URL from user provided image
+  const LOGO_URL = "https://img.js.design/assets/static/f5e386457007e1554625b1854497e246.png";
 
   useEffect(() => {
     const handleScroll = () => {
@@ -33,7 +36,6 @@ const Navbar: React.FC<NavbarProps> = ({ currentView, onNavigate }) => {
   };
 
   const isDarkView = currentView === 'contact';
-  const displayLight = !isScrolled && !isDarkView;
 
   return (
     <nav 
@@ -45,11 +47,11 @@ const Navbar: React.FC<NavbarProps> = ({ currentView, onNavigate }) => {
     >
       <div className="max-w-7xl mx-auto flex justify-between items-center">
         <div 
-          className="flex items-center gap-2 group cursor-pointer"
+          className="flex items-center gap-3 group cursor-pointer"
           onClick={() => handleNavClick('home')}
         >
-          <div className="w-10 h-10 bg-pink-500 rounded-xl flex items-center justify-center text-white transform group-hover:rotate-12 transition-transform">
-            <Heart size={24} fill="white" />
+          <div className="w-10 h-10 overflow-hidden rounded-full flex items-center justify-center transform group-hover:scale-110 transition-transform">
+            <img src={LOGO_URL} alt="Chify Logo" className="w-full h-full object-cover" />
           </div>
           <span className={`text-2xl font-black tracking-tighter ${isScrolled || isDarkView ? 'text-blue-600' : 'text-white'}`}>
             CHIFY<span className="text-pink-500">REHAB</span>
