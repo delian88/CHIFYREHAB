@@ -309,7 +309,7 @@ const HomeLandingView: React.FC<{ onNavigate: (v: ViewState) => void, openServic
 );
 
 const AboutFullView: React.FC<{ onNavigate: (v: ViewState) => void }> = ({ onNavigate }) => (
-  <div className="pt-32 pb-24 px-6 bg-white min-h-screen">
+  <div className="pt-64 pb-24 px-6 bg-white min-h-screen">
     <div className="max-w-5xl mx-auto">
       <button onClick={() => onNavigate('home')} className="flex items-center gap-2 text-gray-400 hover:text-blue-600 mb-12 transition-colors group">
         <ArrowLeft size={20} className="group-hover:-translate-x-2 transition-transform" /> Back to Home
@@ -343,7 +343,7 @@ const AboutFullView: React.FC<{ onNavigate: (v: ViewState) => void }> = ({ onNav
 );
 
 const ServicesFullView: React.FC<{ onNavigate: (v: ViewState) => void, openService: (s: any) => void }> = ({ onNavigate, openService }) => (
-  <div className="pt-32 pb-24 px-6 bg-gray-50 min-h-screen">
+  <div className="pt-64 pb-24 px-6 bg-gray-50 min-h-screen">
     <div className="max-w-7xl mx-auto">
       <div className="text-center max-w-4xl mx-auto mb-20">
         <button onClick={() => onNavigate('home')} className="inline-flex items-center gap-2 text-gray-400 hover:text-blue-600 mb-8 transition-colors">
@@ -388,7 +388,7 @@ const ServicesFullView: React.FC<{ onNavigate: (v: ViewState) => void, openServi
 );
 
 const ExpertiseFullView: React.FC<{ onNavigate: (v: ViewState) => void }> = ({ onNavigate }) => (
-  <div className="pt-32 pb-24 bg-white min-h-screen">
+  <div className="pt-64 pb-24 bg-white min-h-screen">
     <div className="max-w-7xl mx-auto px-6">
       <div className="grid lg:grid-cols-2 gap-24 items-center mb-40">
         <motion.div initial={{ opacity: 0, x: -30 }} animate={{ opacity: 1, x: 0 }}>
@@ -467,7 +467,7 @@ const ContactFullView: React.FC<{ onNavigate: (v: ViewState) => void, onNotify: 
   };
 
   return (
-    <div className="pt-32 pb-24 bg-gray-900 min-h-screen text-white">
+    <div className="pt-64 pb-24 bg-gray-900 min-h-screen text-white">
       <div className="max-w-7xl mx-auto px-6 grid lg:grid-cols-2 gap-24">
         <motion.div initial={{ opacity: 0, x: -30 }} animate={{ opacity: 1, x: 0 }}>
           <button onClick={() => onNavigate('home')} className="flex items-center gap-2 text-gray-500 hover:text-white mb-16 transition-colors">

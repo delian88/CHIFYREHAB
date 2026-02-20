@@ -14,7 +14,7 @@ const Navbar: React.FC<NavbarProps> = ({ currentView, onNavigate }) => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-  const LOGO_URL = "https://img.js.design/assets/static/f5e386457007e1554625b1854497e246.png";
+  const LOGO_URL = "/logo.svg";
 
   useEffect(() => {
     const handleScroll = () => {
@@ -44,7 +44,7 @@ const Navbar: React.FC<NavbarProps> = ({ currentView, onNavigate }) => {
       className={`fixed w-full z-50 transition-all duration-500 px-6 lg:px-16 ${
         isScrolled 
           ? "py-4 bg-white/90 backdrop-blur-2xl shadow-xl" 
-          : "py-10 bg-transparent"
+          : "pt-24 pb-12 bg-transparent"
       }`}
     >
       <div className="max-w-[1400px] mx-auto flex justify-between items-center">
@@ -56,10 +56,9 @@ const Navbar: React.FC<NavbarProps> = ({ currentView, onNavigate }) => {
             <img src={LOGO_URL} alt="Chify Seal" className="w-full h-full object-cover" />
           </div>
           <div className="flex flex-col">
-            <span className={`text-3xl font-black tracking-tighter leading-none ${isScrolled || isDarkView ? 'text-gray-900' : 'text-white'}`}>
+            <span className={`text-xl font-black tracking-tighter leading-none ${isScrolled || isDarkView ? 'text-gray-900' : 'text-white'}`}>
               CHIFY<span className="text-pink-500">REHAB</span>
             </span>
-            <span className={`text-[10px] font-black uppercase tracking-[0.3em] ${isScrolled || isDarkView ? 'text-blue-600' : 'text-blue-400'}`}>Center of Excellence</span>
           </div>
         </div>
 
@@ -109,7 +108,7 @@ const Navbar: React.FC<NavbarProps> = ({ currentView, onNavigate }) => {
             <div className="flex justify-between items-center mb-20">
               <div className="flex items-center gap-4">
                 <img src={LOGO_URL} className="w-10 h-10 rounded-xl" alt="Chify Logo" />
-                <span className="text-3xl font-black tracking-tighter text-gray-900">CHIFY<span className="text-pink-500">REHAB</span></span>
+                <span className="text-xl font-black tracking-tighter text-gray-900">CHIFY<span className="text-pink-500">REHAB</span></span>
               </div>
               <button className="text-gray-900" onClick={() => setIsMobileMenuOpen(false)}>
                 <X size={40} />

@@ -68,7 +68,7 @@ const HeroSlider: React.FC = () => {
         </motion.div>
       </AnimatePresence>
 
-      <div className="relative z-10 flex h-full items-center px-6 lg:px-24">
+      <div className="relative z-10 flex h-full items-center pt-48 px-6 lg:px-24">
         <div className="max-w-4xl">
           <motion.div
             key={`title-${current}`}

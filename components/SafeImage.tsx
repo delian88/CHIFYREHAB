@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
 
-export const LOGO_URL = "https://img.js.design/assets/static/f5e386457007e1554625b1854497e246.png";
+export const LOGO_URL = "/logo.svg";
 
 interface SafeImageProps {
   src: string;
